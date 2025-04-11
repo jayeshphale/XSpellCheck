@@ -41,8 +41,9 @@ function XModal({ closeModal }) {
     closeModal();
   };
 
+  // ✅ Fixes modal backdrop click issue
   const handleBackdropClick = (e) => {
-    if (e.target.classList.contains('modal-overlay')) {
+    if (e.currentTarget === e.target) {
       closeModal();
     }
   };
@@ -53,16 +54,16 @@ function XModal({ closeModal }) {
         <h2>Modal Form</h2>
         <form onSubmit={handleSubmit}>
           <label>Username</label>
-          <input type="text" name="username" id="username" onChange={handleChange} value={formData.username} />
+          <input type="text" name="username" onChange={handleChange} value={formData.username} />
 
           <label>Email</label>
-          <input type="text" name="email" id="email" onChange={handleChange} value={formData.email} />
+          <input type="text" name="email" onChange={handleChange} value={formData.email} />
 
           <label>Phone</label>
-          <input type="text" name="phone" id="phone" onChange={handleChange} value={formData.phone} />
+          <input type="text" name="phone" onChange={handleChange} value={formData.phone} />
 
           <label>Date of Birth</label>
-          <input type="date" name="dob" id="dob" onChange={handleChange} value={formData.dob} />
+          <input type="date" name="dob" onChange={handleChange} value={formData.dob} />
 
           <button type="submit" className="submit-button">Submit</button>
         </form>
