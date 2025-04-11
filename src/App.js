@@ -6,7 +6,7 @@ function App() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="App">
+    <div className="App" id="root">
       {!isOpen && <button onClick={() => setIsOpen(true)}>Open Form</button>}
       {isOpen && <XModal closeModal={() => setIsOpen(false)} />}
     </div>

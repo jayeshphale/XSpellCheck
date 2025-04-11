@@ -3,15 +3,14 @@ import './XModal.css';
 
 function XModal({ closeModal }) {
   const [formData, setFormData] = useState({
+    username: '',
     email: '',
     phone: '',
     dob: ''
   });
-  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
-    setError('');
   };
 
   const handleSubmit = (e) => {
@@ -19,28 +18,23 @@ function XModal({ closeModal }) {
 
     const { email, phone, dob } = formData;
 
-    if (!email || !phone || !dob) {
-      setError('All fields are required.');
-      return;
-    }
-
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneRegex = /^[0-9]{10}$/;
     const dobDate = new Date(dob);
     const today = new Date();
 
     if (!emailRegex.test(email)) {
-      setError('Invalid email address');
+      alert('Invalid email');
       return;
     }
 
     if (!phoneRegex.test(phone)) {
-      setError('Invalid phone number');
+      alert('Invalid phone number');
       return;
     }
 
     if (!(dobDate instanceof Date) || isNaN(dobDate.getTime()) || dobDate >= today) {
-      setError('Invalid date of birth');
+      alert('Invalid date of birth');
       return;
     }
 
@@ -48,7 +42,6 @@ function XModal({ closeModal }) {
     closeModal();
   };
 
-  // Close modal when clicking outside
   const handleBackdropClick = (e) => {
     if (e.target.className === 'modal') {
       closeModal();
@@ -60,16 +53,17 @@ function XModal({ closeModal }) {
       <div className="modal-content">
         <h2>Modal Form</h2>
         <form onSubmit={handleSubmit}>
+          <label>Username</label>
+          <input type="text" name="username" id="username" onChange={handleChange} value={formData.username} />
+
           <label>Email</label>
-          <input type="text" name="email" onChange={handleChange} value={formData.email} />
+          <input type="text" name="email" id="email" onChange={handleChange} value={formData.email} />
 
           <label>Phone</label>
-          <input type="text" name="phone" onChange={handleChange} value={formData.phone} />
+          <input type="text" name="phone" id="phone" onChange={handleChange} value={formData.phone} />
 
           <label>Date of Birth</label>
-          <input type="date" name="dob" onChange={handleChange} value={formData.dob} />
-
-          {error && <p style={{ color: 'red' }}>{error}</p>}
+          <input type="date" name="dob" id="dob" onChange={handleChange} value={formData.dob} />
 
           <button type="submit" className="submit-button">Submit</button>
         </form>
