@@ -11,25 +11,26 @@ function XModal({ isOpen, onClose }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
-    const username = form.username.value;
+    const email = form.email.value;
     const phone = form.phone.value;
     const dob = form.dob.value;
 
-    // You can handle the form data here (e.g., API calls)
-    console.log({ username, phone, dob });
-    onClose(); // close the modal after successful submission
+    // Log submitted data
+    console.log({ email, phone, dob });
+
+    onClose(); // close modal after submit
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" id="modalOverlay" onClick={handleOutsideClick}>
+    <div className="modal modal-overlay" id="modalOverlay" onClick={handleOutsideClick}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <button className="close-btn" onClick={onClose}>&times;</button>
         <h2>Register</h2>
         <form onSubmit={handleSubmit}>
-          <label htmlFor="username">Email</label>
-          <input type="email" id="username" name="username" required />
+          <label htmlFor="email">Email</label>
+          <input type="email" id="email" name="email" required />
 
           <label htmlFor="phone">Phone Number</label>
           <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required />
