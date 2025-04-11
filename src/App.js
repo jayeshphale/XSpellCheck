@@ -1,13 +1,14 @@
-
-// import logo from './logo.svg';
-// import './App.css';
-import SpellCheckApp from "./Spell";
-
+import React, { useState } from 'react';
+import XModal from './XModal';
+import './App.css';
 
 function App() {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div className="App">
-      <SpellCheckApp/>
+      {!isOpen && <button onClick={() => setIsOpen(true)}>Open Form</button>}
+      {isOpen && <XModal closeModal={() => setIsOpen(false)} />}
     </div>
   );
 }
