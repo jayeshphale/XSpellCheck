@@ -1,6 +1,3 @@
-import React, { useState } from 'react';
-import './XModal.css';
-
 function XModal({ closeModal }) {
   const [formData, setFormData] = useState({
     username: '',
@@ -15,9 +12,7 @@ function XModal({ closeModal }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const { email, phone, dob } = formData;
-
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneRegex = /^[0-9]{10}$/;
     const dobDate = new Date(dob);
@@ -27,12 +22,10 @@ function XModal({ closeModal }) {
       alert('Invalid email');
       return;
     }
-
     if (!phoneRegex.test(phone)) {
       alert('Invalid phone number');
       return;
     }
-
     if (!(dobDate instanceof Date) || isNaN(dobDate.getTime()) || dobDate >= today) {
       alert('Invalid date of birth');
       return;
@@ -43,7 +36,7 @@ function XModal({ closeModal }) {
   };
 
   const handleBackdropClick = (e) => {
-    if (e.target.classList.contains('modal-overlay')) {
+    if (e.target === e.currentTarget) {
       closeModal();
     }
   };
@@ -54,16 +47,16 @@ function XModal({ closeModal }) {
         <h2>Modal Form</h2>
         <form onSubmit={handleSubmit}>
           <label>Username</label>
-          <input type="text" name="username" id="username" onChange={handleChange} value={formData.username} />
-
+          <input type="text" name="username" onChange={handleChange} value={formData.username} />
+          
           <label>Email</label>
-          <input type="text" name="email" id="email" onChange={handleChange} value={formData.email} />
+          <input type="text" name="email" onChange={handleChange} value={formData.email} />
 
           <label>Phone</label>
-          <input type="text" name="phone" id="phone" onChange={handleChange} value={formData.phone} />
+          <input type="text" name="phone" onChange={handleChange} value={formData.phone} />
 
           <label>Date of Birth</label>
-          <input type="date" name="dob" id="dob" onChange={handleChange} value={formData.dob} />
+          <input type="date" name="dob" onChange={handleChange} value={formData.dob} />
 
           <button type="submit" className="submit-button">Submit</button>
         </form>
@@ -71,5 +64,3 @@ function XModal({ closeModal }) {
     </div>
   );
 }
-
-export default XModal;
