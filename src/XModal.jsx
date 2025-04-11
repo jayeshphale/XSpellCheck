@@ -1,71 +1,31 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import './XModal.css';
 
 function XModal({ closeModal }) {
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    phone: '',
-    dob: ''
-  });
+  const modalRef = useRef();
 
-  const handleChange = (e) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const { email, phone, dob } = formData;
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const phoneRegex = /^[0-9]{10}$/;
-    const dobDate = new Date(dob);
-    const today = new Date();
-
-    if (!emailRegex.test(email)) {
-      alert('Invalid email');
-      return;
-    }
-
-    if (!phoneRegex.test(phone)) {
-      alert('Invalid phone number');
-      return;
-    }
-
-    if (!(dobDate instanceof Date) || isNaN(dobDate.getTime()) || dobDate >= today) {
-      alert('Invalid date of birth');
-      return;
-    }
-
-    alert('Form submitted successfully!');
-    closeModal();
-  };
-
-  const handleBackdropClick = (e) => {
-    if (e.target.className === 'modal') {
+  const handleOutsideClick = (e) => {
+    if (modalRef.current && !modalRef.current.contains(e.target)) {
       closeModal();
     }
   };
 
   return (
-    <div className="modal" onClick={handleBackdropClick}>
-      <div className="modal-content">
-        <h2>Modal Form</h2>
-        <form onSubmit={handleSubmit}>
-          <label>Username</label>
-          <input type="text" name="username" id="username" onChange={handleChange} value={formData.username} />
+    <div className="modal" onClick={handleOutsideClick}>
+      <div className="modal-content" ref={modalRef}>
+        <button className="close-btn" onClick={closeModal}>&times;</button>
+        <h2>User Information</h2>
+        <form>
+          <label htmlFor="email">Email:</label>
+          <input type="email" id="email" required />
 
-          <label>Email</label>
-          <input type="text" name="email" id="email" onChange={handleChange} value={formData.email} />
+          <label htmlFor="phone">Phone Number:</label>
+          <input type="tel" id="phone" required />
 
-          <label>Phone</label>
-          <input type="text" name="phone" id="phone" onChange={handleChange} value={formData.phone} />
+          <label htmlFor="dob">Date of Birth:</label>
+          <input type="date" id="dob" required />
 
-          <label>Date of Birth</label>
-          <input type="date" name="dob" id="dob" onChange={handleChange} value={formData.dob} />
-
-          <button type="submit" className="submit-button">Submit</button>
+          <button className="submit-button" type="submit">Submit</button>
         </form>
       </div>
     </div>
