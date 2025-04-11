@@ -7,7 +7,8 @@ function App() {
   return (
     <div id="root">
       <h1>Welcome to the Modal App</h1>
-      <button onClick={() => setModalOpen(true)}>Open Modal</button>
+      {/* FIXED: Changed button text to "Open Form" */}
+      <button onClick={() => setModalOpen(true)}>Open Form</button>
       <XModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
     </div>
   );
