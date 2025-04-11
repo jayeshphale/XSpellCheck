@@ -10,45 +10,48 @@ const XModal = ({ closeModal }) => {
   });
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
+    const { id, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [id]: value
+    }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const { username, email, phone, dob } = formData;
 
-    // Validation
+    // Validations
     if (!username || !email || !phone || !dob) {
       alert('All fields are required.');
       return;
     }
 
-    if (!email.includes('@')) {
-      alert('Invalid email. Please check your email address.');
+    if (!email.includes('@') || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      alert('Invalid email address.');
       return;
     }
 
     if (!/^\d{10}$/.test(phone)) {
-      alert('Invalid phone number. Please enter a 10-digit phone number.');
+      alert('Phone number must be 10 digits.');
       return;
     }
 
     const enteredDate = new Date(dob);
-    const currentDate = new Date();
-    if (enteredDate > currentDate) {
-      alert('Invalid date of birth. Date of birth cannot be in the future.');
+    const today = new Date();
+    if (enteredDate > today) {
+      alert('Date of birth cannot be in the future.');
       return;
     }
 
-    // Reset form and close modal
+    alert('Form submitted successfully!');
     setFormData({ username: '', email: '', phone: '', dob: '' });
     closeModal();
   };
 
   useEffect(() => {
     const handleOutsideClick = (e) => {
-      if (e.target.className === 'modal') {
+      if (e.target.classList.contains('modal')) {
         closeModal();
       }
     };
@@ -59,6 +62,7 @@ const XModal = ({ closeModal }) => {
   return (
     <div className="modal">
       <div className="modal-content">
+        <button className="close-btn" onClick={closeModal}>×</button>
         <h2>Fill Details</h2>
         <form onSubmit={handleSubmit}>
           <label htmlFor="username">Username:</label>
