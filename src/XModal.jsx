@@ -1,87 +1,81 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
+import React, { useState } from 'react';
+import './XModal.css';
 
-const XModal = ({ closeModal }) => {
+function XModal({ closeModal }) {
   const [formData, setFormData] = useState({
-    username: '',
     email: '',
     phone: '',
     dob: ''
   });
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
-    const { id, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [id]: value
-    }));
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    setError('');
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { username, email, phone, dob } = formData;
 
-    // Validations
-    if (!username || !email || !phone || !dob) {
-      alert('All fields are required.');
+    const { email, phone, dob } = formData;
+
+    if (!email || !phone || !dob) {
+      setError('All fields are required.');
       return;
     }
 
-    if (!email.includes('@') || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      alert('Invalid email address.');
-      return;
-    }
-
-    if (!/^\d{10}$/.test(phone)) {
-      alert('Phone number must be 10 digits.');
-      return;
-    }
-
-    const enteredDate = new Date(dob);
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^[0-9]{10}$/;
+    const dobDate = new Date(dob);
     const today = new Date();
-    if (enteredDate > today) {
-      alert('Date of birth cannot be in the future.');
+
+    if (!emailRegex.test(email)) {
+      setError('Invalid email address');
+      return;
+    }
+
+    if (!phoneRegex.test(phone)) {
+      setError('Invalid phone number');
+      return;
+    }
+
+    if (!(dobDate instanceof Date) || isNaN(dobDate.getTime()) || dobDate >= today) {
+      setError('Invalid date of birth');
       return;
     }
 
     alert('Form submitted successfully!');
-    setFormData({ username: '', email: '', phone: '', dob: '' });
     closeModal();
   };
 
-  useEffect(() => {
-    const handleOutsideClick = (e) => {
-      if (e.target.classList.contains('modal')) {
-        closeModal();
-      }
-    };
-    window.addEventListener('click', handleOutsideClick);
-    return () => window.removeEventListener('click', handleOutsideClick);
-  }, [closeModal]);
+  // Close modal when clicking outside
+  const handleBackdropClick = (e) => {
+    if (e.target.className === 'modal') {
+      closeModal();
+    }
+  };
 
   return (
-    <div className="modal">
+    <div className="modal" onClick={handleBackdropClick}>
       <div className="modal-content">
-        <button className="close-btn" onClick={closeModal}>×</button>
-        <h2>Fill Details</h2>
+        <h2>Modal Form</h2>
         <form onSubmit={handleSubmit}>
-          <label htmlFor="username">Username:</label>
-          <input id="username" value={formData.username} onChange={handleChange} type="text" />
+          <label>Email</label>
+          <input type="text" name="email" onChange={handleChange} value={formData.email} />
 
-          <label htmlFor="email">Email Address:</label>
-          <input id="email" value={formData.email} onChange={handleChange} type="email" />
+          <label>Phone</label>
+          <input type="text" name="phone" onChange={handleChange} value={formData.phone} />
 
-          <label htmlFor="phone">Phone Number:</label>
-          <input id="phone" value={formData.phone} onChange={handleChange} type="text" />
+          <label>Date of Birth</label>
+          <input type="date" name="dob" onChange={handleChange} value={formData.dob} />
 
-          <label htmlFor="dob">Date of Birth:</label>
-          <input id="dob" value={formData.dob} onChange={handleChange} type="date" />
+          {error && <p style={{ color: 'red' }}>{error}</p>}
 
           <button type="submit" className="submit-button">Submit</button>
         </form>
       </div>
     </div>
   );
-};
+}
 
 export default XModal;
