@@ -43,13 +43,13 @@ function XModal({ closeModal }) {
   };
 
   const handleBackdropClick = (e) => {
-    if (e.target.className === 'modal') {
+    if (e.target.classList.contains('modal-overlay')) {
       closeModal();
     }
   };
 
   return (
-    <div className="modal" onClick={handleBackdropClick}>
+    <div className="modal-overlay" onClick={handleBackdropClick}>
       <div className="modal-content">
         <h2>Modal Form</h2>
         <form onSubmit={handleSubmit}>
