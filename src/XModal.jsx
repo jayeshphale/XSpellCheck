@@ -1,31 +1,43 @@
-import React, { useRef } from 'react';
-import './XModal.css';
+import React from "react";
+import "./XModal.css";
 
-function XModal({ closeModal }) {
-  const modalRef = useRef();
-
+function XModal({ isOpen, onClose }) {
   const handleOutsideClick = (e) => {
-    if (modalRef.current && !modalRef.current.contains(e.target)) {
-      closeModal();
+    if (e.target.id === "modalOverlay") {
+      onClose();
     }
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const username = form.username.value;
+    const phone = form.phone.value;
+    const dob = form.dob.value;
+
+    // You can handle the form data here (e.g., API calls)
+    console.log({ username, phone, dob });
+    onClose(); // close the modal after successful submission
+  };
+
+  if (!isOpen) return null;
+
   return (
-    <div className="modal" onClick={handleOutsideClick}>
-      <div className="modal-content" ref={modalRef}>
-        <button className="close-btn" onClick={closeModal}>&times;</button>
-        <h2>User Information</h2>
-        <form>
-          <label htmlFor="email">Email:</label>
-          <input type="email" id="email" required />
+    <div className="modal-overlay" id="modalOverlay" onClick={handleOutsideClick}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <button className="close-btn" onClick={onClose}>&times;</button>
+        <h2>Register</h2>
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="username">Email</label>
+          <input type="email" id="username" name="username" required />
 
-          <label htmlFor="phone">Phone Number:</label>
-          <input type="tel" id="phone" required />
+          <label htmlFor="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required />
 
-          <label htmlFor="dob">Date of Birth:</label>
-          <input type="date" id="dob" required />
+          <label htmlFor="dob">Date of Birth</label>
+          <input type="date" id="dob" name="dob" required />
 
-          <button className="submit-button" type="submit">Submit</button>
+          <button type="submit" className="submit-button">Submit</button>
         </form>
       </div>
     </div>
